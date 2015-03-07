@@ -5,6 +5,6 @@
  *
  */
 
-import sum from "sum.js";
+import sum from "./sum.js";
 
-console.log(sum(1, 2));
+console.log(sum(4, 0));
