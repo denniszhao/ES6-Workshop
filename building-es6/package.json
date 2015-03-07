@@ -1,0 +1,14 @@
+{
+  "name": "building-es6",
+  "version": "1.0.0",
+  "description": "H@B: ES6 - Using ES6 transpilers in build systems.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dennis Zhao",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^4.7.1"
+  }
+}
