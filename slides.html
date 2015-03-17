@@ -401,33 +401,226 @@ pre .chunk {
   </div>
 
   <div class="slide" id="slide-1">
-    <section class="slide-content"><h2 id="the-history-of-javascript">The History of JavaScript</h2>
-<p>Go into some stuff</p>
+    <section class="slide-content"><h3 id="h-b-es6-the-future-of-javascript">H@B: ES6, the future of JavaScript</h3>
+<p>Dennis Zhao, @probablyafish</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-2">
-    <section class="slide-content"><h2 id="slide-2">Slide 2</h2>
-<p>Some slide 2 stuff</p>
+    <section class="slide-content"><h2 id="the-history-of-javascript">The History of JavaScript</h2>
+<ul>
+<li>&quot;Created in 10 days&quot; by Brendan Eich at Netscape</li>
+<li>Language of the web!</li>
+<li>The web moved quickly.. while the language did not.</li>
+</ul>
 </section>
   </div>
   <div class="slide hidden" id="slide-3">
-    <section class="slide-content"><h2 id="slide-3">Slide 3</h2>
-<p>Some slide 3 stuff</p>
+    <section class="slide-content"><h2 id="arrows">Arrows</h2>
+<ul>
+<li>Arrows provide a shorthand for declaring anonymous functions. </li>
+<li>Unlike the <code>function () {}</code> declaration that we&#39;re used to, arrow functions share the same <code>this</code> as their surrounding code. </li>
+</ul>
+<pre><code>(function () {
+  this.n = 10;
+  setTimeout(function () {
+      console.log(this.n); // ???
+  }, 1000);
+})();</code></pre>
+<pre><code>(function () {
+  this.nn = 10;
+  setTimeout(=&gt; 
+      console.log(this.n); // 10
+  );
+});</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-4">
-    <section class="slide-content"><h2 id="slide-4">Slide 4</h2>
-<p>Some slide 4 stuff</p>
+    <section class="slide-content"><h2 id="arrows-in-practice">Arrows in practice</h2>
+<p>Great for event handling! Right now we have to do this: </p>
+<pre><code>var self = this;
+btn.on(&#39;click&#39;, function (e) {
+    e.preventDefault();
+    self.numClicks++;
+});</code></pre>
+<p>or this...</p>
+<pre><code>btn.on(&#39;click&#39;, function () {
+   e.preventDefault();
+   this.numClicks++;
+}.bind(this));</code></pre>
+<p>Now we can do this!</p>
+<pre><code>btn.on(&#39;click&#39;, e =&gt; {
+    e.preventDefault();
+    this.numClicks++;
+})</code></pre>
+<p>Wow so much easier, wow so clean.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-5">
+    <section class="slide-content"><h2 id="classes">Classes</h2>
+<p>Other methods have long existed for writing classes in JavaScript, but with ES6 we finally have support from the language itself. </p>
+<pre><code>class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+
+    bark() {
+        console.log(this.name);
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, color) {
+        super(name);
+        this.color = color;
+    }
+}
+
+var d = new Dog(&quot;Doggy&quot;);
+d.bark(); // &quot;Doggy&quot;</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-6">
+    <section class="slide-content"><h2 id="default-parameters">Default parameters</h2>
+<p>We have a workaround for default parameters right now by checking the parameter passed in, but it&#39;s much nicer to have actual support for default parameters!</p>
+<pre><code>function f_es5(x) {
+    x = x ? x : 15;
+
+    console.log(x);
+}
+
+function f_es6(x=15) {
+    console.log(x);
+}
+
+f_es5(); // 15
+f_es5(10); // 10
+
+f_es6(); // 15
+f_es6(10); // 10</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-7">
+    <section class="slide-content"><h2 id="let-const">Let + Const</h2>
+<ul>
+<li><code>let</code> allows you to have block-scoped variables. </li>
+<li><code>const</code> lets you declare constants!</li>
+</ul>
+<pre><code>function f() {
+    let x = 5;
+    {
+        const x = &quot;hello&quot;; 
+        x = &quot;hi&quot;; // Error, const
+    }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-8">
+    <section class="slide-content"><h2 id="modules">Modules</h2>
+<p>A lot of really smart people have built smart work-arounds since JavaScript doesn&#39;t have built-in support for modules. </p>
+<ul>
+<li>CommonJS: most common (e.g. node.js), Synchronous loading (evaluated at compilation)</li>
+<li>AMD: most common on the browser (e.g. require.js), asynchronous loading</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-9">
+    <section class="slide-content"><h2 id="modules-differences-between-the-two-">Modules (differences between the two)</h2>
+<p>ES6 has support for named exports. </p>
+<pre><code>// lib.js
+export const one = 1;
+export const two = 2;
+export function square(x) { return x * x; }</code></pre>
+<pre><code>// app.js
+import { square, one, two } from &quot;lib&quot;;
+console.log(square(two)); // 4</code></pre>
+<p>And in CommonJS?</p>
+<pre><code>// lib.js
+function square(x) { return x * x; }
+module.exports = {
+  one: 1,
+  two: 2,
+  square: square
+};</code></pre>
+<pre><code>var lib = require(&#39;lib&#39;);
+console.log(lib.square(lib.two));</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-10">
+    <section class="slide-content"><p>Basic use case:</p>
+<pre><code>// lib/sum.js
+export default sum(x, y) { return x + y; };</code></pre>
+<pre><code>// test.js
+import sum from &quot;./lib/sum&quot;;
+console.log(sum(1, 2));</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-11">
+    <section class="slide-content"><h2 id="more-data-structures-">More data structures!</h2>
+<ul>
+<li>ES6 will have support for Map, Set, WeakMap, and WeakSet</li>
+<li>The difference between Maps and Objects are that Maps&#39; keys don&#39;t have to be strings.</li>
+</ul>
+<pre><code>var s = new Set();
+s.add(1).add(2).add(1);
+console.log(s.size); // 2</code></pre>
+<pre><code>var m = new Map();
+m.set(&quot;dennis&quot;, 20);
+m.set(&quot;H@B&quot;, &quot;cool&quot;);</code></pre>
+</section>
+  </div>
+  <div class="slide hidden  " id="slide-12">
+    <section class="slide-content"><h2 id="proxies">Proxies</h2>
+<p>Proxies can be used to intercept operations on objects. </p>
+<p>Example from ES6 spec:</p>
+<pre><code>var o = {};
+var handler = {
+    get: function (receiver, name) {
+        return `Hello, ${name}!`;
+    }
+};
+
+var p = new Proxy(o, handler);
+console.log(p.world); // &quot;Hello, world&quot;;</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-13">
+    <section class="slide-content"><h2 id="so-much-more-">So much more!</h2>
+<p>There&#39;s a ton more that I haven&#39;t talked about today...</p>
+<ul>
+<li>Template strings</li>
+<li>Destructuring </li>
+<li>Iterators, generators</li>
+<li>Symbols</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-14">
+    <section class="slide-content"><h2 id="using-es6-syntax-today-">Using ES6 syntax today!</h2>
+<ul>
+<li>Babel is an awesome 6to5 transpiler that takes your ES6 code and turns it into ES5-compatible code. </li>
+</ul>
+<p><a href="https://babeljs.io/">https://babeljs.io/</a></p>
+<pre><code>babel [file] -o [output file]</code></pre>
+<pre><code>node [output file]</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-15">
+    <section class="slide-content"><h2 id="babel-as-a-build-process">Babel as a build process</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-16">
+    <section class="slide-content"><h2 id="more-es6-resources">More ES6 resources</h2>
+<ul>
+<li><a href="https://babeljs.io/docs/learn-es6/">https://babeljs.io/docs/learn-es6/</a></li>
+<li><a href="https://github.com/lukehoban/es6features">https://github.com/lukehoban/es6features</a></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-17">
     <section class="slide-content"><div class="author">
   <h1 class="name">Dennis Zhao</h1>
     <h3 class="twitter">
       <a href="http://twitter.com/@probablyafish">@probablyafish</a>
-    </h3>
-    <h3 class="url">
-      <a href="http://denniszhao.com">http://denniszhao.com</a>
     </h3>
     <h3 class="email">
       <a href="mailto:denniszhao@berkeley.edu">denniszhao@berkeley.edu</a>
